@@ -182,7 +182,6 @@ def hadith_for_screen():
     book, its number and a grade: al-Tirmidhi's own, or for the other Sunan Al-Albani's. One a scholar grades weak,
     one from the four Sunan Al-Albani does not grade Sahih, Hasan or Hasan Sahih, or one al-Tirmidhi does not grade
     حسن or صحيح, is not shown."""
-    digits = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
     out = []
     for h in json.loads((ROOT / "assets/shared/hadith.json").read_text(encoding="utf-8")):
         full = h.get("full")
@@ -200,7 +199,7 @@ def hadith_for_screen():
             continue
         if any(k == "q" for k, _ in parts) and words <= HADITH_MAX_WORDS:
             grade = tirmidhi_grade(full["text"]) or albani_grade(full.get("grades"))
-            source = f"{full['book']} · {str(full['number']).translate(digits)}" + (f" · {grade}" if grade else "")
+            source = f"{full['book']} · {full['number']}" + (f" · {grade}" if grade else "")
             out.append({"parts": parts, "source": source})
     return out
 

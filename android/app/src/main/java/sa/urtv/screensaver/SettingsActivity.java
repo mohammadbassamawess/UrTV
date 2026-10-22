@@ -124,7 +124,7 @@ public class SettingsActivity extends Activity {
             new Runnable() { public void run() { pickIdle(); } });
 
         header("التطبيق");
-        row("التحديث التلقائي للصفحة", prefs.autoUpdate() ? "يعمل · كل ٦ ساعات" : "متوقف", R.drawable.ic_sync, new Runnable() { public void run() {
+        row("التحديث التلقائي للصفحة", prefs.autoUpdate() ? "يعمل · كل 6 ساعات" : "متوقف", R.drawable.ic_sync, new Runnable() { public void run() {
             prefs.setAutoUpdate(!prefs.autoUpdate()); render(); } });
         row("تحديث الشاشة الآن", Updater.versionNote(this) + " " + "ينزّل أحدث نسخة من الشاشة. تحديث التطبيق نفسه يكون عبر مساعد الذكاء الاصطناعي، لأنه يضبط الشاشة الرئيسية وشاشة التوقف، وإعداداتك كلها تبقى.", R.drawable.ic_sync, new Runnable() { public void run() { updateNow(); } });
     }
@@ -199,7 +199,7 @@ public class SettingsActivity extends Activity {
 
     private void addTeam(String id, String name) {
         if (prefs.addTeam(id, name)) toast("تمت متابعة " + name);
-        else toast(prefs.teams().size() >= Prefs.MAX_TEAMS ? "الحد الأعلى ١٠ فرق" : "متابَع مسبقاً");
+        else toast(prefs.teams().size() >= Prefs.MAX_TEAMS ? "الحد الأعلى 10 فرق" : "متابَع مسبقاً");
         render();
     }
 
@@ -442,7 +442,7 @@ public class SettingsActivity extends Activity {
         return minutesLabel((int) (ms / 60000));
     }
 
-    /** دقيقة واحدة · دقيقتان · ٥ دقائق · ١٥ دقيقة */
+    /** دقيقة واحدة · دقيقتان · 5 دقائق · 15 دقيقة */
     private static String minutesLabel(int n) {
         if (n == 1) return "دقيقة واحدة";
         if (n == 2) return "دقيقتان";
@@ -494,9 +494,7 @@ public class SettingsActivity extends Activity {
     }
 
     private static String arabicNum(int n) {
-        StringBuilder b = new StringBuilder();
-        for (char c : String.valueOf(n).toCharArray()) b.append((char) ('٠' + (c - '0')));
-        return b.toString();
+        return String.valueOf(n);
     }
 
     private String showsLabel() {

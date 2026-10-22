@@ -738,7 +738,7 @@ public class MainActivity extends Activity {
         String hijri = "";
         try {
             android.icu.text.SimpleDateFormat f = new android.icu.text.SimpleDateFormat(
-                    "EEEE، d MMMM y", new android.icu.util.ULocale("ar_SA@calendar=islamic-umalqura"));
+                    "EEEE، d MMMM y", new android.icu.util.ULocale("ar_SA@calendar=islamic-umalqura;numbers=latn"));
             hijri = f.format(now.getTime()).replaceAll("\\s*هـ\\s*$", "") + " هـ";
         } catch (Exception ignored) { }
         String greg = new SimpleDateFormat("d MMMM", new Locale("ar")).format(now.getTime());
@@ -746,9 +746,7 @@ public class MainActivity extends Activity {
     }
 
     private static String arabicDigits(String s) {
-        StringBuilder b = new StringBuilder(s.length());
-        for (char c : s.toCharArray()) b.append(c >= '0' && c <= '9' ? (char) ('٠' + (c - '0')) : c);
-        return b.toString();
+        return s;
     }
 
     /** Connected or not comes from ConnectivityManager: WifiManager hides the network (id -1, "<unknown ssid>")
