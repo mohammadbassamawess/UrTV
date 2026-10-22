@@ -7,11 +7,14 @@ import json
 import sys
 from pathlib import Path
 
-REGIONS = [  # GeoNames admin1 code, Arabic name, in display order
-    ("10", "منطقة الرياض"), ("14", "منطقة مكة المكرمة"), ("05", "منطقة المدينة المنورة"),
-    ("06", "المنطقة الشرقية"), ("08", "منطقة القصيم"), ("11", "منطقة عسير"),
-    ("19", "منطقة تبوك"), ("13", "منطقة حائل"), ("15", "منطقة الحدود الشمالية"),
-    ("17", "منطقة جازان"), ("16", "منطقة نجران"), ("02", "منطقة الباحة"), ("20", "منطقة الجوف"),
+REGIONS = [  # GeoNames admin1 code, Arabic name, time zone, in display order
+    ("10", "منطقة الرياض", "Asia/Riyadh"), ("14", "منطقة مكة المكرمة", "Asia/Riyadh"),
+    ("05", "منطقة المدينة المنورة", "Asia/Riyadh"), ("06", "المنطقة الشرقية", "Asia/Riyadh"),
+    ("08", "منطقة القصيم", "Asia/Riyadh"), ("11", "منطقة عسير", "Asia/Riyadh"),
+    ("19", "منطقة تبوك", "Asia/Riyadh"), ("13", "منطقة حائل", "Asia/Riyadh"),
+    ("15", "منطقة الحدود الشمالية", "Asia/Riyadh"), ("17", "منطقة جازان", "Asia/Riyadh"),
+    ("16", "منطقة نجران", "Asia/Riyadh"), ("02", "منطقة الباحة", "Asia/Riyadh"),
+    ("20", "منطقة الجوف", "Asia/Riyadh"), ("AE", "الإمارات العربية المتحدة", "Asia/Dubai"),
 ]
 
 # geonameid -> Arabic name (fills gaps and picks the common spelling)
@@ -79,12 +82,13 @@ EXTRA = [
     ("02", "المخواة", 19.7667, 41.4333), ("02", "قلوة", 19.9333, 41.2667),
     ("02", "القرى", 20.0167, 41.4000),
     ("20", "دومة الجندل", 29.8115, 39.8687), ("20", "القريات", 31.3317, 37.3428),
+    ("AE", "عجمان", 25.4052, 55.5136),
 ]
 
 
 def main(path):
     data = json.load(open(path, encoding="utf-8"))
-    by_region = {code: {} for code, _ in REGIONS}
+    by_region = {code: {} for code, _, _ in REGIONS}
     for c in data.values():
         if c["countrycode"] != "SA":
             continue
@@ -101,10 +105,10 @@ def main(path):
         by_region[region].setdefault(name, (0, lat, lon))
 
     rows = []
-    for code, rname in REGIONS:
+    for code, rname, timezone in REGIONS:
         cities = sorted(by_region[code].items(), key=lambda kv: -kv[1][0])
         items = ",\n".join(f'            {{"{n}", "{lat:.4f}", "{lon:.4f}"}}' for n, (_, lat, lon) in cities)
-        rows.append(f'        new Region("{rname}", new String[][] {{\n{items}\n        }})')
+        rows.append(f'        new Region("{rname}", "{timezone}", new String[][] {{\n{items}\n        }})')
     body = ",\n".join(rows)
     out = Path(__file__).resolve().parents[2] / "android/app/src/main/java/sa/urtv/screensaver/Cities.java"
     out.write_text(f"""package sa.urtv.screensaver;
@@ -113,8 +117,9 @@ def main(path):
 final class Cities {{
     static final class Region {{
         final String name;
+        final String timezone;
         final String[][] cities;   // name, latitude, longitude
-        Region(String name, String[][] cities) {{ this.name = name; this.cities = cities; }}
+        Region(String name, String timezone, String[][] cities) {{ this.name = name; this.timezone = timezone; this.cities = cities; }}
     }}
 
     static final Region[] REGIONS = {{
@@ -129,3 +134,4 @@ final class Cities {{
 
 if __name__ == "__main__":
     main(sys.argv[1])
+

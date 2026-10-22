@@ -12,7 +12,16 @@ import java.util.List;
 
 /** Everything the user picks in settings, and the dashboard URL built from it. */
 final class Prefs {
-    static final String TZ = "Asia/Riyadh";
+      /** Use the selected city's region time zone, falling back to the TV's local zone. */
+      String timezone() {
+          String selectedCity = city()[0];
+          for (Cities.Region region : Cities.REGIONS) {
+              for (String[] item : region.cities) {
+                  if (item[0].equals(selectedCity)) return region.timezone;
+              }
+          }
+          return java.util.TimeZone.getDefault().getID();
+      }
 
     // TheSportsDB id, Arabic name; more teams come from the in-app search
     static final String[][] TEAM_PRESETS = {
@@ -166,7 +175,7 @@ final class Prefs {
         List<String> ids = new ArrayList<>();
         for (String s : shows()) ids.add(s.split("\\|", 2)[0]);
         return "city=" + Uri.encode(city[0]) + "&lat=" + city[1] + "&lon=" + city[2]
-            + "&tz=" + Uri.encode(TZ)
+            + "&tz=" + Uri.encode(timezone())
             + "&teams=" + join(teamIds(), ",")
             + "&panel=" + panel()
             + "&week=" + ("none".equals(panel()) ? "0" : "1")   // for a page older than #panel
@@ -193,3 +202,4 @@ final class Prefs {
         return b.toString();
     }
 }
+
