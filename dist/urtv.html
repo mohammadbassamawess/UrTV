@@ -194,8 +194,8 @@
   .p-mid .big{display:block;text-align:center;line-height:1.06}
   .p-mid .num{font-size:1.3em;line-height:1}
   .p-mid .unit{font-size:.46em;font-weight:500;color:#D6AF6B;letter-spacing:.02em;display:inline;vertical-align:.5em}
-  .p-weather{text-align:left}
-  .p-weather .big{justify-content:flex-end}
+  .p-weather{text-align:right;direction:rtl}
+  .p-weather .big{justify-content:flex-start}
   .p-weather .wxline{gap:.55em;line-height:1.15}
   .p-weather .wxt{font-size:1em}
   .p-weather .wxd{font-size:.62em;font-weight:500;color:#D8CDB6;white-space:nowrap}
@@ -220,7 +220,7 @@
   }
   @media (prefers-reduced-motion:no-preference){.photo.settle{animation:settle 60s ease-out both}}
 
-  /* Weather now sits in the bottom-left slot formerly used by the match strip. */
+  /* Weather sits in the former match slot, with its content anchored toward the screen interior. */
   .wxline{display:flex;align-items:baseline;gap:.5em;justify-content:flex-end;line-height:1.3;
     font-size:clamp(19px,1.86vw,37px);font-weight:500;color:var(--sand)}
   .wxt{font-family:'ThmanyahDisplay','Thmanyah',serif;font-weight:700;color:#FFFCF2;direction:ltr;
