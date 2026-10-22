@@ -149,10 +149,9 @@
     color:#FFFDF6;font-variant-numeric:tabular-nums;
     text-shadow:0 4px 70px rgba(0,0,0,.65), 0 0 130px rgba(255,236,190,.12);
   }
-  /* Reserve two equal digit slots for both hours and minutes: digit widths and 1/2-digit hours
-     must never change the clock's total width or move its center. */
-  .clock .d{unicode-bidi:isolate;display:flex;flex:0 0 1.59em;width:1.59em;justify-content:center;gap:var(--digit-gap,.09em)}
-  .clock .d i{display:block;flex:0 0 .75em;text-align:center;font-style:normal}
+  .clock .d{unicode-bidi:isolate}
+  .clock .d i{font-style:normal}
+  .clock .d i + i{margin-left:var(--digit-gap,.09em)}
   .clock .sep{
     font-size:.46em;align-self:center;transform:translateY(-.08em);color:var(--gold);opacity:.9;padding:0 .1em;
   }
